@@ -457,8 +457,13 @@ function extractEmails(str) {
  *    => 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm'
  *
  */
-function encodeToRot13(/* str */) {
-  throw new Error('Not implemented');
+function encodeToRot13(str) {
+  const defLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+  const lettersToRot13 = 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm';
+  return str.replace(/[A-z]/g, (letter) => {
+    const i = defLetters.indexOf(letter);
+    return lettersToRot13[i];
+  });
 }
 
 /**
@@ -485,10 +490,32 @@ function encodeToRot13(/* str */) {
  *   'Q♠' => 50
  *   'K♠' => 51
  */
-function getCardId(/* value */) {
-  throw new Error('Not implemented');
+function getCardId(value) {
+  const rowLength = 13;
+  const suit = [
+    'A',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    '10',
+    'J',
+    'Q',
+    'K',
+  ];
+  const rank = ['♣', '♦', '♥', '♠'];
+  const firstChar = value.slice(0, -1);
+  const firsChartIdx = suit.indexOf(firstChar);
+  const secondChar = value.at(-1);
+  const secondCharIdx = rank.indexOf(secondChar);
+  return secondCharIdx > 0
+    ? rowLength * secondCharIdx + (firsChartIdx + 1) - 1
+    : firsChartIdx * (secondCharIdx + 1);
 }
-
 module.exports = {
   getStringLength,
   isString,
